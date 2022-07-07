@@ -22,6 +22,7 @@ tic % start timer
 clear
 diary MENOTR_Fit_Command_Window
 load('Start_Workspace')
+patchJobStorageLocation()
 %% PREALLOCATE AND INITIALIZATION
     %Preallocate
 param_vals_or = ones(ORnum,length(param_vals));
@@ -64,7 +65,7 @@ while stopflag == 1
             % optimization routine(OR). Within a period some number of ORs(
             % this is controlled with a user variable OR_num) are run in
             % successive order independent of one another. Each OR will
-            % proceed through the two lowest tier fitting iterations,
+            % proceeded through the two lowest tier fitting iterations,
             % cycles and generations producing an estimate of the fit
             % parameters. These ORs are run in this manner as a way to
             % access the degree of convergence the algorithm has reached
@@ -107,7 +108,7 @@ while stopflag == 1
                 crossover,stdevs,best,mut_probability,elite,decay,nlls_size,indvar,CyMat(CyMatH,:),...
                 zy,g(CyMatH),params_ub,params_lb,k,CyMatH,Period,i,algsw,axspace,run_fig);
         else
-            zy = 1; k = 1;% Counting index for user display              
+            zy = 1; k = 1;% Counting index for userdisplay              
                 [param_vals(CyMatH+1,:),best_chisq,chi_values,RMSD,indvar1_sim,simvals]...
                     = ga_fitting_routine(param_vals(CyMatH,:),g(CyMatH),pop_size,data_input,weights,...
                 crossover,stdevs,best,mut_probability,elite,decay,nlls_size,indvar,CyMat(CyMatH,:),...
@@ -155,8 +156,6 @@ while stopflag == 1
         
     CV_chisq(Period,1) = std(chisq_or)/mean(chisq_or);
     
-    CV_chisq(isnan(CV_chisq))=0;
-    
     %calculates the mean, absolute coefficient of variation for the
         %best parameters from each OR
     param_cv_std = std(param_vals_or,0,1); % standard deviation of each parameter
@@ -170,7 +169,7 @@ while stopflag == 1
     totper_y = num2str(stopcrit_period);
     disp('  ')
     disp(['Relative Standard Deviation of Period Parameters: ',pcv_y])
-    disp(['Relative Standard Deviation of Chi-Squared Between ORs: ',dcs_y,'%'])
+    disp(['Percent Change in Chisq: ',dcs_y,'%'])
     disp(['Period ',per_y,' out of the max ',totper_y])
     disp('  ')
         % compares stopping criteria to the fit results
@@ -240,7 +239,7 @@ hold on
 plot(Sim_IndVar,Sim_Fits,'k')
 title('Fits of Data')
 xlabel('Independent Variable')
-ylabel('Dependent Variable')
+ylabel('Depdendent Variable')
 hold off
 subplot(2,1,2)
 plot(indvar,Residual)
@@ -255,7 +254,7 @@ hold on
 semilogx(Sim_IndVar,Sim_Fits,'k')
 title('Fits of Data')
 xlabel('Independent Variable')
-ylabel('Dependent Variable')
+ylabel('Depdendent Variable')
 hold off
 subplot(2,1,2)
 semilogx(indvar,Residual)

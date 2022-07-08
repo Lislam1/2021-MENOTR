@@ -223,8 +223,9 @@ Sim_Data(:,2:end) = Sim_Fits;
 Residual = data_input-model_simulator(param_vals_fit,indvar);
 Fit_Residual = zeros(size(indvar,1),(size(indvar,2)+size(Residual,2)));
 Fit_Residual(:,1) = indvar;
-Fit_Residual(:,2:end) = Residual; 
-Fit_Variance = sum(sum(Residual.^2))/numel(data_input);
+Fit_Residual(:,2:end) = Residual;
+Fit_RSS = sum(Residual.^2); % Added by Liana on 20220707 to compute residual sum of squares
+Fit_Variance = sum(sum(Residual.^2))/numel(data_input); %Comment by Liana: This makes no sense 20220707. Why sum twice?
 Fit_RMSD = sqrt(Fit_Variance);
 Fit_ChiSq = best_chisq;
 Data = InsertData;
@@ -264,7 +265,8 @@ ylabel('Residuals')
 end
 % SAVE
 saveas(final_plot,'Final_Plot.tif');
-save('Fit_Workspace','Data','Fit_ChiSq','Fit_ParameterValues','Fit_Residual','Fit_RMSD','Fit_Variance','Sim_Data')
+% Changed by Liana on 20220707 to save residual sum of squares
+save('Fit_Workspace','Data','Fit_ChiSq','Fit_ParameterValues','Fit_Residual','Fit_RMSD','Fit_RSS','Fit_Variance','Sim_Data')
 clear
 load('Fit_Workspace.mat')
 delete('Period_Workspace.mat','param_vals_period.mat','CurrentParamVals.mat')
